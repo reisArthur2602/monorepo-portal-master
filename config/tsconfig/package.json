@@ -1,0 +1,10 @@
+{
+  "name": "@repo/tsconfig",
+  "version": "0.0.0",
+  "files": [
+    "node-ts.json",
+    "node24.json",
+    "react-native.json",
+    "vite-react.json"
+  ]
+}
