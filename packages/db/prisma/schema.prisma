@@ -1,6 +1,8 @@
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
+  runtime = "nodejs"
+ 
 }
 
 datasource db {
@@ -15,7 +17,7 @@ model User {
   createdAt DateTime @default(now())
   role      UserRole @default(MEMBER)
 
-  @@map("users")
+ 
 }
 
 enum UserRole {

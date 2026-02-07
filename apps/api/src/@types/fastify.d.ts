@@ -1,3 +1,4 @@
+import type { PrismaClient } from "@repo/db";
 import "fastify";
 
 declare module "fastify" {

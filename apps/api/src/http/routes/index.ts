@@ -1,6 +1,10 @@
-import type { FastifyInstance } from 'fastify';
-import { usersRoutes } from './users/index.ts';
+import type { FastifyInstance } from "fastify";
+import { usersRoutes } from "./users/index";
 
-export const routes = (app: FastifyInstance) => {
-    app.register(usersRoutes, { prefix: '/users' });
+export const dashboardRoutes = (fastify: FastifyInstance) => {
+  fastify.register(usersRoutes, { prefix: "/users" });
 };
+
+export const totemRoutes = (fastify: FastifyInstance) => {};
+
+export const appRoutes = (fastify: FastifyInstance) => {};

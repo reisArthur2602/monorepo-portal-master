@@ -1,55 +1,55 @@
-import { prisma } from '@repo/db';
-import { createUserBodySchema, createUserResponseSchema } from '@repo/schemas';
-import type { FastifyInstance } from 'fastify';
-import type { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { hashPassword } from '../../../lib/argon2';
-import { authPlugin } from '../../../plugins/auth';
-import { BadRequestError } from '../../errors/bad-request';
+import { db } from "@repo/db";
+import { createUserBodySchema, createUserResponseSchema } from "@repo/schemas";
+import type { FastifyInstance } from "fastify";
+import type { ZodTypeProvider } from "fastify-type-provider-zod";
+import { hashPassword } from "../../../lib/argon2";
+import { authPlugin } from "../../../plugins/auth";
+import { BadRequestError } from "../../errors/bad-request";
 
-export const createUser = async (app: FastifyInstance) =>
-    app
-        .withTypeProvider<ZodTypeProvider>()
-        .register(authPlugin)
-        .post(
-            '/',
-            {
-                schema: {
-                    tags: ['Users'],
-                    summary: 'Create User',
-                    operationId: 'createUser',
-                    body: createUserBodySchema,
-                    response: {
-                        201: createUserResponseSchema,
-                    },
-                },
-                config: {
-                    openapi: {
-                        security: [{ bearerAuth: [] }],
-                    },
-                },
-                preHandler: async (request) => {
-                    await request.shouldBeAdmin();
-                },
-            },
+export const createUser = (app: FastifyInstance) =>
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .register(authPlugin)
+    .post(
+      "/create",
+      {
+        schema: {
+          tags: ["Users"],
+          summary: "Create User",
+          operationId: "createUser",
+          body: createUserBodySchema,
+          response: {
+            201: createUserResponseSchema,
+          },
+          security: [{ bearerAuth: [] }],
+        },
 
-            async (request, reply) => {
-                const { email, name } = request.body;
+        preHandler: async (request) => {
+          await request.shouldBeAdmin();
+        },
+      },
 
-                const existingUserWithEmail = await prisma.user.findUnique({
-                    where: { email },
-                });
+      async (request, reply) => {
+        const { email, name } = request.body;
 
-                if (existingUserWithEmail)
-                    throw new BadRequestError('Este e-mail está sendo usado por outro membro');
+        const existingUserWithEmail = await db.user.findUnique({
+          where: { email },
+        });
 
-                const DEFAULT_PASSWORD_USERS = process.env.DEFAULT_PASSWORD_USERS as string;
+        if (existingUserWithEmail)
+          throw new BadRequestError(
+            "Este e-mail está sendo usado por outro membro",
+          );
 
-                const passwordHash = await hashPassword(DEFAULT_PASSWORD_USERS);
+        const DEFAULT_PASSWORD_USERS = process.env
+          .DEFAULT_PASSWORD_USERS as string;
 
-                await prisma.user.create({
-                    data: { email, password: passwordHash, name },
-                });
+        const passwordHash = await hashPassword(DEFAULT_PASSWORD_USERS);
 
-                return reply.status(201).send(null);
-            }
-        );
+        await db.user.create({
+          data: { email, password: passwordHash, name },
+        });
+
+        return reply.status(201).send({ created: true });
+      },
+    );
