@@ -1,5 +1,4 @@
 import z from "zod";
-import { UserRole } from "@repo/db";
 
 const createUserBodySchema = z.object({
   email: z.string().email(),
@@ -15,7 +14,7 @@ const profileResponseSchema = z.object({
     id: z.cuid(),
     email: z.string().email(),
     name: z.string(),
-    role: z.enum(UserRole),
+    role: z.enum(["ADMIN", "MEMBER"]).default("MEMBER"),
   }),
 });
 
@@ -30,7 +29,7 @@ const loginResponseSchema = z.object({
     id: z.cuid(),
     name: z.string(),
     email: z.string().email(),
-    role: z.enum(UserRole).default("MEMBER"),
+    role: z.enum(["ADMIN", "MEMBER"]).default("MEMBER"),
   }),
 });
 

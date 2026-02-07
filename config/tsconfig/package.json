@@ -1,12 +1,8 @@
 {
   "name": "@repo/tsconfig",
   "version": "0.0.0",
-  "exports": {
-    ".": "./src/index.ts"
-  },
   "files": [
-    "node-ts.json",
-    "node24.json",
+    "node.json",
     "react-native.json",
     "vite-react.json"
   ]

@@ -1,10 +1,10 @@
-import { db } from "@repo/db";
 import { createUserBodySchema, createUserResponseSchema } from "@repo/schemas";
 import type { FastifyInstance } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { hashPassword } from "../../../lib/argon2";
 import { authPlugin } from "../../../plugins/auth";
 import { BadRequestError } from "../../errors/bad-request";
+import { db } from "../../../db/prisma";
 
 export const createUser = (app: FastifyInstance) =>
   app

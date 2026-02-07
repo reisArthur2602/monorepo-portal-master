@@ -1,8 +1,8 @@
 import type { FastifyInstance } from "fastify";
 import fastifyPlugin from "fastify-plugin";
 
-import { db } from "@repo/db";
 import { UnauthorizedError } from "../http/errors/unauthorized";
+import { db } from "../db/prisma";
 
 export const authPlugin = fastifyPlugin(async (fastify: FastifyInstance) => {
   fastify.decorateRequest("getCurrentUserId", async () => {
@@ -30,7 +30,6 @@ export const authPlugin = fastifyPlugin(async (fastify: FastifyInstance) => {
           throw new UnauthorizedError("Usuário não autorizado ou inexistente.");
 
         return payload.sub;
-        
       } catch (error) {
         throw new UnauthorizedError("Token de autenticação inválido.");
       }

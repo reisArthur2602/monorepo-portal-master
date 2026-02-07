@@ -1,9 +1,10 @@
-import { db } from "@repo/db";
+
 import { profileResponseSchema } from "@repo/schemas";
 import type { FastifyInstance } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { authPlugin } from "../../../plugins/auth";
 import { NotFoundError } from "../../errors/not-found";
+import { db } from "../../../db/prisma";
 
 export const profile = async (app: FastifyInstance) => {
   app

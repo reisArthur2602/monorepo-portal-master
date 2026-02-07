@@ -1,9 +1,9 @@
-import { db } from "@repo/db";
 import { loginBodySchema, loginResponseSchema } from "@repo/schemas";
 import type { FastifyInstance } from "fastify";
 import { type ZodTypeProvider } from "fastify-type-provider-zod";
 import { BadRequestError } from "../../errors/bad-request";
 import { verifyPassword } from "../../../lib/argon2";
+import { db } from "../../../db/prisma";
 
 export const login = (app: FastifyInstance) => {
   app.withTypeProvider<ZodTypeProvider>().post(
@@ -35,7 +35,7 @@ export const login = (app: FastifyInstance) => {
 
       if (!user) throw new BadRequestError("Credenciais inválidas");
 
-      const isPasswordValid = await verifyPassword(password, user.password);
+      const isPasswordValid = await verifyPassword(user.password, password);
 
       if (!isPasswordValid) throw new BadRequestError("Credenciais inválidas");
 
