@@ -9,4 +9,7 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User'
+export type * from './models/Patient'
+export type * from './models/PatientAuth'
+export type * from './models/ActivationCode'
 export type * from './commonInputTypes'

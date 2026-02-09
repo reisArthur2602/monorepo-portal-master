@@ -7,6 +7,9 @@
     "build": "tsc",
     "start": "node dist/http/server.js"
   },
+  "exports": {
+    "./generated": "./generated/prisma/client.ts"
+  },
   "type": "module",
   "devDependencies": {
     "@repo/schemas": "workspace:*",

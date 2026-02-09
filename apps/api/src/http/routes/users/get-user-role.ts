@@ -1,41 +1,37 @@
-import { profileResponseSchema } from "@repo/schemas";
+import { getUserRoleResponseSchema } from "@repo/schemas";
 import type { FastifyInstance } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
-import { authPlugin } from "../../../plugins/auth";
 import { NotFoundError } from "../../errors/not-found";
 import { db } from "../../../db/prisma";
 
-export const profile = async (app: FastifyInstance) => {
+export const getUserRole = async (app: FastifyInstance) => {
   app.withTypeProvider<ZodTypeProvider>().get(
-    "/profile",
+    "/role",
     {
       schema: {
         tags: ["Users"],
-        summary: "Get User Profile",
-        operationId: "getProfile",
+        summary: "Get User Role",
+        operationId: "getUserRole",
         response: {
-          200: profileResponseSchema,
+          200: getUserRoleResponseSchema,
         },
         security: [{ bearerAuth: [] }],
       },
-
       preHandler: [async (request) => await request.authenticate()],
     },
+
     async (request, reply) => {
       const userId = await request.getCurrentUserId();
 
       const user = await db.user.findUnique({
         where: { id: userId },
         select: {
-          id: true,
-          email: true,
-          name: true,
           role: true,
         },
       });
       if (!user) throw new NotFoundError("Usuário não encontrado.");
 
-      return reply.status(200).send({ user });
+      return reply.status(200).send({ role: user.role });
     },
   );
 };

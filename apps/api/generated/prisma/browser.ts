@@ -22,3 +22,18 @@ export * from './enums';
  * 
  */
 export type User = Prisma.UserModel
+/**
+ * Model Patient
+ * 
+ */
+export type Patient = Prisma.PatientModel
+/**
+ * Model PatientAuth
+ * 
+ */
+export type PatientAuth = Prisma.PatientAuthModel
+/**
+ * Model ActivationCode
+ * 
+ */
+export type ActivationCode = Prisma.ActivationCodeModel

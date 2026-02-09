@@ -1,15 +1,15 @@
 import z from "zod";
 
-const createUserBodySchema = z.object({
+export const createUserBodySchema = z.object({
   email: z.string().email(),
   name: z.string().min(2),
 });
 
-const createUserResponseSchema = z.object({
+export const createUserResponseSchema = z.object({
   created: z.boolean().default(true),
 });
 
-const profileResponseSchema = z.object({
+export const profileResponseSchema = z.object({
   user: z.object({
     id: z.cuid(),
     email: z.string().email(),
@@ -18,12 +18,16 @@ const profileResponseSchema = z.object({
   }),
 });
 
-const loginBodySchema = z.object({
+export const getUserRoleResponseSchema = z.object({
+  role: z.enum(["ADMIN", "MEMBER"]).default("MEMBER"),
+});
+
+export const loginBodySchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
 });
 
-const loginResponseSchema = z.object({
+export const loginResponseSchema = z.object({
   accessToken: z.string(),
   user: z.object({
     id: z.cuid(),
@@ -32,11 +36,3 @@ const loginResponseSchema = z.object({
     role: z.enum(["ADMIN", "MEMBER"]).default("MEMBER"),
   }),
 });
-
-export {
-  createUserBodySchema,
-  createUserResponseSchema,
-  loginBodySchema,
-  loginResponseSchema,
-  profileResponseSchema,
-};

@@ -384,7 +384,10 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
-  User: 'User'
+  User: 'User',
+  Patient: 'Patient',
+  PatientAuth: 'PatientAuth',
+  ActivationCode: 'ActivationCode'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -400,7 +403,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user"
+    modelProps: "user" | "patient" | "patientAuth" | "activationCode"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -478,6 +481,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Patient: {
+      payload: Prisma.$PatientPayload<ExtArgs>
+      fields: Prisma.PatientFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PatientFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PatientFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientPayload>
+        }
+        findFirst: {
+          args: Prisma.PatientFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PatientFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientPayload>
+        }
+        findMany: {
+          args: Prisma.PatientFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientPayload>[]
+        }
+        create: {
+          args: Prisma.PatientCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientPayload>
+        }
+        createMany: {
+          args: Prisma.PatientCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PatientCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientPayload>[]
+        }
+        delete: {
+          args: Prisma.PatientDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientPayload>
+        }
+        update: {
+          args: Prisma.PatientUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientPayload>
+        }
+        deleteMany: {
+          args: Prisma.PatientDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PatientUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PatientUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientPayload>[]
+        }
+        upsert: {
+          args: Prisma.PatientUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientPayload>
+        }
+        aggregate: {
+          args: Prisma.PatientAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePatient>
+        }
+        groupBy: {
+          args: Prisma.PatientGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PatientGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PatientCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PatientCountAggregateOutputType> | number
+        }
+      }
+    }
+    PatientAuth: {
+      payload: Prisma.$PatientAuthPayload<ExtArgs>
+      fields: Prisma.PatientAuthFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PatientAuthFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientAuthPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PatientAuthFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientAuthPayload>
+        }
+        findFirst: {
+          args: Prisma.PatientAuthFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientAuthPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PatientAuthFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientAuthPayload>
+        }
+        findMany: {
+          args: Prisma.PatientAuthFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientAuthPayload>[]
+        }
+        create: {
+          args: Prisma.PatientAuthCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientAuthPayload>
+        }
+        createMany: {
+          args: Prisma.PatientAuthCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PatientAuthCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientAuthPayload>[]
+        }
+        delete: {
+          args: Prisma.PatientAuthDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientAuthPayload>
+        }
+        update: {
+          args: Prisma.PatientAuthUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientAuthPayload>
+        }
+        deleteMany: {
+          args: Prisma.PatientAuthDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PatientAuthUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PatientAuthUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientAuthPayload>[]
+        }
+        upsert: {
+          args: Prisma.PatientAuthUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PatientAuthPayload>
+        }
+        aggregate: {
+          args: Prisma.PatientAuthAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePatientAuth>
+        }
+        groupBy: {
+          args: Prisma.PatientAuthGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PatientAuthGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PatientAuthCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PatientAuthCountAggregateOutputType> | number
+        }
+      }
+    }
+    ActivationCode: {
+      payload: Prisma.$ActivationCodePayload<ExtArgs>
+      fields: Prisma.ActivationCodeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ActivationCodeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivationCodePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ActivationCodeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivationCodePayload>
+        }
+        findFirst: {
+          args: Prisma.ActivationCodeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivationCodePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ActivationCodeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivationCodePayload>
+        }
+        findMany: {
+          args: Prisma.ActivationCodeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivationCodePayload>[]
+        }
+        create: {
+          args: Prisma.ActivationCodeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivationCodePayload>
+        }
+        createMany: {
+          args: Prisma.ActivationCodeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ActivationCodeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivationCodePayload>[]
+        }
+        delete: {
+          args: Prisma.ActivationCodeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivationCodePayload>
+        }
+        update: {
+          args: Prisma.ActivationCodeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivationCodePayload>
+        }
+        deleteMany: {
+          args: Prisma.ActivationCodeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ActivationCodeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ActivationCodeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivationCodePayload>[]
+        }
+        upsert: {
+          args: Prisma.ActivationCodeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ActivationCodePayload>
+        }
+        aggregate: {
+          args: Prisma.ActivationCodeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateActivationCode>
+        }
+        groupBy: {
+          args: Prisma.ActivationCodeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ActivationCodeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ActivationCodeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ActivationCodeCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -529,6 +754,41 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const PatientScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  cpf: 'cpf',
+  phone: 'phone',
+  birthDate: 'birthDate',
+  createdAt: 'createdAt'
+} as const
+
+export type PatientScalarFieldEnum = (typeof PatientScalarFieldEnum)[keyof typeof PatientScalarFieldEnum]
+
+
+export const PatientAuthScalarFieldEnum = {
+  id: 'id',
+  patientId: 'patientId',
+  passwordHash: 'passwordHash',
+  isActive: 'isActive',
+  createdAt: 'createdAt'
+} as const
+
+export type PatientAuthScalarFieldEnum = (typeof PatientAuthScalarFieldEnum)[keyof typeof PatientAuthScalarFieldEnum]
+
+
+export const ActivationCodeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  patientId: 'patientId',
+  createdAt: 'createdAt',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt'
+} as const
+
+export type ActivationCodeScalarFieldEnum = (typeof ActivationCodeScalarFieldEnum)[keyof typeof ActivationCodeScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -543,6 +803,14 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
 
@@ -590,6 +858,13 @@ export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
  * Reference to a field of type 'UserRole[]'
  */
 export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -702,6 +977,9 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
+  patient?: Prisma.PatientOmit
+  patientAuth?: Prisma.PatientAuthOmit
+  activationCode?: Prisma.ActivationCodeOmit
 }
 
 /* Types for Logging */

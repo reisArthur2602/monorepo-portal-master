@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.3.0",
   "engineVersion": "9d6ad21cbbceab97458517b147a6a09ff43aa735",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../generated/prisma\"\n  runtime  = \"nodejs\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id        String   @id @default(cuid())\n  email     String   @unique\n  name      String\n  password  String\n  createdAt DateTime @default(now())\n  role      UserRole @default(MEMBER)\n}\n\nenum UserRole {\n  MEMBER\n  ADMIN\n}\n",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../generated/prisma\"\n  runtime  = \"nodejs\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id        String   @id @default(cuid())\n  email     String   @unique\n  name      String\n  password  String\n  createdAt DateTime @default(now())\n  role      UserRole @default(MEMBER)\n}\n\nmodel Patient {\n  id        String           @id @default(cuid())\n  name      String\n  cpf       String           @unique\n  phone     String           @unique\n  birthDate DateTime\n  createdAt DateTime         @default(now())\n  codes     ActivationCode[]\n  auth      PatientAuth?\n}\n\nmodel PatientAuth {\n  id           String   @id @default(cuid())\n  patientId    String   @unique\n  passwordHash String?\n  isActive     Boolean  @default(false)\n  createdAt    DateTime @default(now())\n  patient      Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)\n}\n\nmodel ActivationCode {\n  id        String    @id @default(cuid())\n  code      String    @unique\n  patientId String\n  createdAt DateTime  @default(now())\n  expiresAt DateTime?\n  usedAt    DateTime?\n  patient   Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)\n\n  @@index([patientId])\n  @@index([code, usedAt])\n}\n\nenum UserRole {\n  MEMBER\n  ADMIN\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"UserRole\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"UserRole\"}],\"dbName\":null},\"Patient\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"cpf\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"birthDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"codes\",\"kind\":\"object\",\"type\":\"ActivationCode\",\"relationName\":\"ActivationCodeToPatient\"},{\"name\":\"auth\",\"kind\":\"object\",\"type\":\"PatientAuth\",\"relationName\":\"PatientToPatientAuth\"}],\"dbName\":null},\"PatientAuth\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"patientId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"passwordHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"patient\",\"kind\":\"object\",\"type\":\"Patient\",\"relationName\":\"PatientToPatientAuth\"}],\"dbName\":null},\"ActivationCode\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"code\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"patientId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"usedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"patient\",\"kind\":\"object\",\"type\":\"Patient\",\"relationName\":\"ActivationCodeToPatient\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -185,6 +185,36 @@ export interface PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.patient`: Exposes CRUD operations for the **Patient** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Patients
+    * const patients = await prisma.patient.findMany()
+    * ```
+    */
+  get patient(): Prisma.PatientDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.patientAuth`: Exposes CRUD operations for the **PatientAuth** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PatientAuths
+    * const patientAuths = await prisma.patientAuth.findMany()
+    * ```
+    */
+  get patientAuth(): Prisma.PatientAuthDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.activationCode`: Exposes CRUD operations for the **ActivationCode** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ActivationCodes
+    * const activationCodes = await prisma.activationCode.findMany()
+    * ```
+    */
+  get activationCode(): Prisma.ActivationCodeDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {

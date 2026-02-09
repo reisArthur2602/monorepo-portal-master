@@ -4,50 +4,67 @@ import fastifyPlugin from "fastify-plugin";
 import { UnauthorizedError } from "../http/errors/unauthorized";
 import { db } from "../db/prisma";
 
-export const authPlugin = fastifyPlugin(async (fastify: FastifyInstance) => {
-  fastify.decorateRequest("getCurrentUserId", async () => {
-    throw new UnauthorizedError("Acesso não autorizado.");
+export const authPlugin = fastifyPlugin(async (app: FastifyInstance) => {
+  app.decorateRequest("authenticate", async () => {
+    throw new UnauthorizedError("Acesso restrito. Autenticação necessária.");
   });
 
-  fastify.decorateRequest("shouldBeAdmin", async () => {
-    throw new UnauthorizedError("Acesso não autorizado.");
+  app.decorateRequest("getCurrentUserId", async () => {
+    throw new UnauthorizedError("Acesso restrito. Autenticação necessária.");
   });
 
-  fastify.addHook("preHandler", async (request) => {
-    request.getCurrentUserId = async () => {
-      if (!request.headers.authorization)
-        throw new UnauthorizedError("Token de autenticação não informado.");
+  app.decorateRequest("shouldBeAdmin", async () => {
+    throw new UnauthorizedError("Acesso restrito. Permissão insuficiente.");
+  });
 
+  app.addHook("preHandler", async (request) => {
+    request.authenticate = async () => {
       try {
-        const payload = await request.jwtVerify<{ sub: string }>();
+        const authorizationHeader = request.headers.authorization;
+
+        if (!authorizationHeader)
+          throw new UnauthorizedError(
+            "Sessão não autenticada. Informe o token de acesso.",
+          );
+
+        const { sub: userId } = await request.jwtVerify<{ sub: string }>();
 
         const user = await db.user.findUnique({
-          where: { id: payload.sub },
+          where: { id: userId },
           select: { id: true, role: true },
         });
 
         if (!user)
-          throw new UnauthorizedError("Usuário não autorizado ou inexistente.");
+          throw new UnauthorizedError(
+            "Sessão inválida. Usuário não encontrado ou sem acesso.",
+          );
 
-        return payload.sub;
-      } catch (error) {
-        throw new UnauthorizedError("Token de autenticação inválido.");
+        return { userId: user.id };
+      } catch {
+        throw new UnauthorizedError(
+          "Sessão expirada ou token inválido. Faça login novamente.",
+        );
       }
     };
 
+    request.getCurrentUserId = async () => {
+      const { userId } = await request.authenticate();
+      return userId;
+    };
+
     request.shouldBeAdmin = async () => {
-      const userId = await request.getCurrentUserId();
+      const { userId } = await request.authenticate();
 
       const user = await db.user.findUnique({
         where: { id: userId },
         select: { role: true },
       });
 
-      const shouldBeAdmin = user?.role !== "ADMIN";
+      const isAdmin = user?.role === "ADMIN";
 
-      if (!shouldBeAdmin)
+      if (!isAdmin)
         throw new UnauthorizedError(
-          "Você não tem permissão para realizar esta ação. Caso precise de acesso, entre em contato com o suporte.",
+          "Acesso negado. Você não possui permissão administrativa para executar esta ação.",
         );
     };
   });

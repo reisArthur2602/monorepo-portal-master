@@ -18,6 +18,7 @@ import {
 
 import { errorHandler } from "./errors";
 import { dashboardRoutes } from "./routes";
+import { authPlugin } from "../plugins/auth";
 
 const PORT = Number(process.env.PORT ?? 6000);
 const HOST = process.env.HOST ?? "0.0.0.0";
@@ -27,7 +28,7 @@ const PUBLIC_BASE_URL =
 
 const server = fastify();
 
-server.register(fastifyRateLimit, { max: 20, timeWindow: "1 minute" });
+// server.register(fastifyRateLimit, { max: 20, timeWindow: "1 minute" });
 
 server.setSerializerCompiler(serializerCompiler);
 server.setValidatorCompiler(validatorCompiler);
@@ -96,6 +97,8 @@ server.register(fastifyApiReference, {
 });
 
 server.register(dashboardRoutes, { prefix: "/dashboard" });
+
+server.register(authPlugin);
 
 server.listen({ port: PORT, host: HOST }).then(() => {
   console.clear();

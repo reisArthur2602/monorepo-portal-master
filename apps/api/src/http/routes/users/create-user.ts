@@ -2,14 +2,12 @@ import { createUserBodySchema, createUserResponseSchema } from "@repo/schemas";
 import type { FastifyInstance } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { hashPassword } from "../../../lib/argon2";
-import { authPlugin } from "../../../plugins/auth";
 import { BadRequestError } from "../../errors/bad-request";
 import { db } from "../../../db/prisma";
 
 export const createUser = (app: FastifyInstance) =>
   app
     .withTypeProvider<ZodTypeProvider>()
-    .register(authPlugin)
     .post(
       "/create",
       {
@@ -24,9 +22,10 @@ export const createUser = (app: FastifyInstance) =>
           security: [{ bearerAuth: [] }],
         },
 
-        preHandler: async (request) => {
-          await request.shouldBeAdmin();
-        },
+        preHandler: [
+          async (request) => await request.authenticate(),
+          async (request) => await request.shouldBeAdmin(),
+        ],
       },
 
       async (request, reply) => {

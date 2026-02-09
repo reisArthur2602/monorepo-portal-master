@@ -51,7 +51,10 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  User: 'User'
+  User: 'User',
+  Patient: 'Patient',
+  PatientAuth: 'PatientAuth',
+  ActivationCode: 'ActivationCode'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -82,6 +85,41 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const PatientScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  cpf: 'cpf',
+  phone: 'phone',
+  birthDate: 'birthDate',
+  createdAt: 'createdAt'
+} as const
+
+export type PatientScalarFieldEnum = (typeof PatientScalarFieldEnum)[keyof typeof PatientScalarFieldEnum]
+
+
+export const PatientAuthScalarFieldEnum = {
+  id: 'id',
+  patientId: 'patientId',
+  passwordHash: 'passwordHash',
+  isActive: 'isActive',
+  createdAt: 'createdAt'
+} as const
+
+export type PatientAuthScalarFieldEnum = (typeof PatientAuthScalarFieldEnum)[keyof typeof PatientAuthScalarFieldEnum]
+
+
+export const ActivationCodeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  patientId: 'patientId',
+  createdAt: 'createdAt',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt'
+} as const
+
+export type ActivationCodeScalarFieldEnum = (typeof ActivationCodeScalarFieldEnum)[keyof typeof ActivationCodeScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -96,4 +134,12 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
